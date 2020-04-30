@@ -39,21 +39,31 @@ const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
 
   function handleIncrement(id: string): void {
-    // TODO
+    increment(id);
   }
 
   function handleDecrement(id: string): void {
-    // TODO
+    decrement(id);
   }
 
   const cartTotal = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    if (products.length > 0) {
+      const newProducts = products.map(
+        product => product.price * product.quantity,
+      );
+      const sumProductsPrice = newProducts.reduce((acu, cur) => acu + cur);
+
+      return formatValue(sumProductsPrice);
+    }
 
     return formatValue(0);
   }, [products]);
 
   const totalItensInCart = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    if (products.length > 0) {
+      const newProduct = products.map(product => product.quantity);
+      return newProduct.reduce((acc, cur) => acc + cur);
+    }
 
     return 0;
   }, [products]);
@@ -68,7 +78,7 @@ const Cart: React.FC = () => {
           ListFooterComponentStyle={{
             height: 80,
           }}
-          renderItem={({ item }: { item: Product }) => (
+          renderItem={({ item }) => (
             <Product>
               <ProductImage source={{ uri: item.image_url }} />
               <ProductTitleContainer>
